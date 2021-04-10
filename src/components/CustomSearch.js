@@ -23,7 +23,11 @@ class CustomSearch extends React.Component {
 
     onSubmit = (data) => {
         searchGameByName(data.game_name).then((response) => {
-            console.log(response);
+            this.setState({
+              displayModal: false,
+            })
+            this.props.onSuccess(response);//把response通过props传给 App.js 的 resources
+            //console.log(response);
         }).catch((err) => {
             message.error(err.message);
         })

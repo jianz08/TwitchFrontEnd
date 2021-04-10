@@ -7,6 +7,7 @@ import Favorites from './components/Favorites';
 import { LikeOutlined, FireOutlined } from '@ant-design/icons';
 import CustomSearch from './components/CustomSearch';
 import SubMenu from 'antd/lib/menu/SubMenu';
+import Home from './components/Home';
 
 
 const { Header, Content, Sider } = Layout;
@@ -15,6 +16,17 @@ class App extends React.Component {
   state = {
     loggedIn: false,
     topGames: [],
+    resources: {
+      VIDEO: [],
+      STREAM: [],
+      CLIP: [],
+    },
+  }
+
+  customSearchOnSuccess = (data) => {
+    this.setState({
+      resources: data,
+    })
   }
 
   signinOnSuccess = () => {
@@ -72,7 +84,7 @@ class App extends React.Component {
       </Header>
       <Layout>
         <Sider width={300} className="site-layout-background">
-          <CustomSearch />
+          <CustomSearch onSuccess={this.customSearchOnSuccess} />
           <Menu
             mode="inline"
             onSelect={() => {}}
