@@ -21,11 +21,11 @@ class Login extends React.Component {
     }
 
     onFinish = (data) => {//data from user input
-        login(data).then((data) => {//response is user_id and name
+        login(data).then((response) => {//response is user_id and name
             this.setState({
                 displayModal: false,
             })
-            message.success(`Welcome back, ${data.name}`);
+            message.success(`Welcome back, ${response.name}`);
             this.props.onSuccess();//Login的props，由App.js传入。signinOnSuccess->loggedIn->true
         }).catch((err) => {
             message.error(err.message);
