@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Layout, Menu, message, Row } from 'antd';
 import Login from './components/Login';
 import Register from './components/Register';
-import { getTopGames, logout } from './utils';
+import { getFavoriteItem, getRecommendations, getTopGames, logout, searchGameById } from './utils';
 import Favorites from './components/Favorites';
 import { LikeOutlined, FireOutlined } from '@ant-design/icons';
 import CustomSearch from './components/CustomSearch';
@@ -21,6 +21,34 @@ class App extends React.Component {
       STREAM: [],
       CLIP: [],
     },
+    favoriteItems: [],
+  }
+
+  favoriteOnChange = () => {
+    getFavoriteItem().then((data) => {
+      this.setState({
+        favoriteItems: data,
+        loggedIn: true,
+      })
+    }).catch((err) => {
+      message.error(err.message);
+    })
+  }
+
+  onGameSelect = ({ key }) => {
+    if (key === 'Recommendation') {
+      getRecommendations().then((data) => {
+        this.setState({
+          resources: data,
+        })
+      })
+      return;
+    }
+    searchGameById(key).then((data) => {
+      this.setState({
+        resources: data,
+      })
+    })
   }
 
   customSearchOnSuccess = (data) => {
@@ -30,9 +58,14 @@ class App extends React.Component {
   }
 
   signinOnSuccess = () => {
-    this.setState({
-      loggedIn: true,
-    })
+    getFavoriteItem().then((data) => {
+      this.setState({
+        loggedIn: true,
+        favoriteItems: data,
+      })
+    }).catch((err) => {
+      message.error(err.message);
+    })   
   }
 
   signoutOnClick = () => {
@@ -63,7 +96,7 @@ class App extends React.Component {
           <Col>
             {
               this.state.loggedIn &&
-              <Favorites />
+              <Favorites data={this.state.favoriteItems}/>
             }
           </Col>
           <Col>
@@ -122,7 +155,12 @@ class App extends React.Component {
               overflow: 'auto'
             }}
           >
-            {'Home'} 
+            <Home 
+              resources={this.state.resources}
+              loggedIn={this.state.loggedIn}
+              favoriteItems={this.state.favoriteItems}
+              favoriteOnChange={this.favoriteOnChange}
+            />
           </Content>
         </Layout>
       </Layout>

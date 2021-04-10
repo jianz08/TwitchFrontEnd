@@ -1,5 +1,4 @@
 import React from 'react';
-import { getFavoriteItem } from '../utils';
 import { Menu, Button, Drawer, message } from 'antd';
 import { EyeOutlined, YoutubeOutlined, VideoCameraOutlined, StarFilled } from '@ant-design/icons';
 
@@ -13,12 +12,7 @@ const MenuKey = {
 
 class Favorites extends React.Component {
     state = {
-        displayDrawer: false,
-        data: {
-            VIDEO: [],
-            STREAM: [],
-            CLIP: [],
-        }
+        displayDrawer: false,        
     }
 
 
@@ -29,18 +23,13 @@ class Favorites extends React.Component {
     }
 
     onFavoriteClick = () => {
-        getFavoriteItem().then((data) => {
-            this.setState({
-                displayDrawer: true,
-                data: data,
-            })
-        }).catch((err) => {
-            message.error(err.message);
+        this.setState({
+            displayDrawer: true,
         })
     }
 
     render = () => {
-        const { VIDEO, STREAM, CLIP } = this.state.data;
+        const { VIDEO, STREAM, CLIP } = this.props.data;//通过App.js的props传favoriteItems[]
     
         return (
         <>
