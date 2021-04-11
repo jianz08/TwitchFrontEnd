@@ -4,6 +4,7 @@ import { StarOutlined, StarFilled } from '@ant-design/icons';
 import { addFavoriteItem, deleteFavoriteItem } from '../utils';
 
 const { TabPane } = Tabs;
+//const TabPane = Tabs.TabPane;
 
 const tabKeys = {
     Streams: 'streams',
@@ -19,8 +20,8 @@ const processUrl = (url) => url
 
 const renderCardTitle = (item, loggedIn, favs, favOnChange) => {
     const title = `${item.broadcaster_name} - ${item.title}`;
-    const isFav = favs.find((fav) => fav.id === item.id);
-
+    const isFav = favs.find((fav) => fav.id === item.id);//找item在不在fav list里，这里返回值不是boolean，是item
+   
     const favOnClick = () => {
         if (isFav) {
             deleteFavoriteItem(item).then(() => {
@@ -44,8 +45,11 @@ const renderCardTitle = (item, loggedIn, favs, favOnChange) => {
                 <Tooltip title={isFav ? "Remove from favorite list" : "Add to favorite list"}>
                     <Button shape="circle" icon={isFav ? <StarFilled /> : <StarOutlined />} onClick={favOnClick}/>
                 </Tooltip>
+                // <Tooltip title="Add to favorite list">
+                //     <Button shape="circle" icon={<StarOutlined />} />
+                // </Tooltip>
             }
-            <div style={{overflow: 'hidder', textOverflow: 'ellipsis', width: 450}}>
+            <div style={{overflow: 'hidden', textOverflow: 'ellipsis', width: 450}}>
                 <Tooltip title={title}>
                     <span>{title}</span>
                 </Tooltip>
@@ -54,10 +58,11 @@ const renderCardTitle = (item, loggedIn, favs, favOnChange) => {
     )
 }
 
+//Responsive grid list
 const renderCardGrid = (data, loggedIn, favs, favOnChange) => {
     return(
         <List 
-            grid={{
+            grid={{//根据屏幕像素决定一行显示几个
                 xs: 1,
                 sm: 2,
                 md: 4,
@@ -78,12 +83,24 @@ const renderCardGrid = (data, loggedIn, favs, favOnChange) => {
                         </a>
                     </Card>
                 </List.Item>
-            )}
-        
+            )}        
         />
     )
 }
 
+// const funComponent = (props) => {//destructing
+//     const { resources, loggedIn } = props;
+// }
+
+//功能单一化，纯负责显示，数据由parent传入
+//没有state,所以这里用了function component
+//key,如果有onChange callback, 需要知道key
+//forceRender，当没有点到其他tab时，DOM也update
+//写成function
+//{renderCardGrid(STREAM, loggedIn, favStreams, favoriteOnChange)}
+//或者写成component
+//<CardGrid />
+//基本上没有state的都可以写成function,看组里的习惯
 const Home = ({ resources, loggedIn, favoriteItems, favoriteOnChange }) => {
     const { VIDEO, STREAM, CLIP } = resources;
     const { VIDEO: favVidoes, STREAM: favStreams, CLIP: favClips} = favoriteItems;

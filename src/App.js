@@ -21,7 +21,11 @@ class App extends React.Component {
       STREAM: [],
       CLIP: [],
     },
-    favoriteItems: [],
+    favoriteItems: {
+      VIDEO: [],
+      STREAM: [],
+      CLIP: [],
+    },
   }
 
   favoriteOnChange = () => {
@@ -35,8 +39,8 @@ class App extends React.Component {
     })
   }
 
-  onGameSelect = ({ key }) => {
-    if (key === 'Recommendation') {
+  onGameSelect = ({ key }) => {//key来自menu item
+    if (key === 'Recommendation') {//点recommendation时更新Home resources
       getRecommendations().then((data) => {
         this.setState({
           resources: data,
@@ -44,14 +48,15 @@ class App extends React.Component {
       })
       return;
     }
-    searchGameById(key).then((data) => {
+    //key={game.id}
+    searchGameById(key).then((data) => {//点topGame时更新Home resources
       this.setState({
         resources: data,
       })
     })
   }
 
-  customSearchOnSuccess = (data) => {
+  customSearchOnSuccess = (data) => {//search时更新Home resources
     this.setState({
       resources: data,
     })
@@ -119,9 +124,9 @@ class App extends React.Component {
         <Sider width={300} className="site-layout-background">
           <CustomSearch onSuccess={this.customSearchOnSuccess} />
           <Menu
-            mode="inline"
-            onSelect={() => {}}
-  		 style={{ marginTop: '10px' }}
+            mode="inline"//Inline menu
+            onSelect={this.onGameSelect}
+  		      style={{ marginTop: '10px' }}
           >
             <Menu.Item icon={<LikeOutlined />} key="Recommendation">
               Recommend for you!</Menu.Item>
@@ -133,7 +138,7 @@ class App extends React.Component {
                       <img 
                         alt="Placeholder"
                         src={game.box_art_url.replace('{height}', '40').replace('{width}', '40')}
-                        style={{ borderRadius: '50%', marginRight: '20px' }}
+                        style={{ borderRadius: '50%', marginRight: '20px' }}//borderRadius显示圆形
                       />
                       <span>
                         {game.name}

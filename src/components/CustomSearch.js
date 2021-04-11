@@ -26,7 +26,9 @@ class CustomSearch extends React.Component {
             this.setState({
               displayModal: false,
             })
-            this.props.onSuccess(response);//把response通过props传给 App.js 的 resources
+            //parent给child传callback
+            //onSuccess由parent定义，由child调用，把response传给parent
+            this.props.onSuccess(response);//把response传给 App.js 的 resources
             //console.log(response);
         }).catch((err) => {
             message.error(err.message);
